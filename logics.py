@@ -5,6 +5,7 @@ from kbase import mapping
 import re
 import shlex
 import json
+import os
 
 
 @respond_to('who.*wrote.*you', re.IGNORECASE)
@@ -32,13 +33,10 @@ def prepare(item):
 
 
 def auth(message):
-    chang = message._client.find_user_by_name('chang')
-    jiann = message._client.find_user_by_name('jiannyeu.yong')
-    chinyin = message._client.find_user_by_name('chinyin.ong')
-    michael = message._client.find_user_by_name('michael.wright')
-    lyesam = message._client.find_user_by_name('lyesam.tho')
-    joseph = message._client.find_user_by_name('joseph.sundram')
-    admins = [chang, jiann, chinyin, michael, lyesam, joseph]
+    admin_users = os.environ.get('SLACKBOT_ADMIN', '').split(',')
+    admins = []
+    for admin_user in admin_users:
+        admins.append(message._client.find_user_by_name(admin_user))
     userid = message._get_user_id()
     return userid in admins
 
