@@ -92,11 +92,27 @@ def help(message):
         'I ll try my best to help you, please talk to me')
 
 
+def match(msg, v):
+    try:
+        containsKeyword = True
+        for keyword in v[1]:
+            if msg.index(keyword) == -1:
+                containsKeyword = False
+                break
+        if containsKeyword:
+            return True
+        if v[2] is None:
+            return False
+        return v[2].match(msg)
+    except:
+        return False
+
+
 @default_reply
 def handle_all(message):
     msg = message._body.get('text', None)
     for k, v in matches.iteritems():
-        if k.match(msg):
-            message.reply(v)
+        if match(msg, v):
+            message.reply(v[0])
             return
     message.reply('not sure how I can help you with that')

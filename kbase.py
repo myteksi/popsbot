@@ -25,8 +25,11 @@ def init():
 
         mapping = json.loads(f)
         for k, v in mapping.iteritems():
+            value = [v, [], None]
+            matches[k] = value
             try:
-                matches[re.compile('.*' + k + '.*', re.IGNORECASE)] = v
+                value[1] = k.split('.*')
+                value[2] = re.compile('.*' + k + '.*', re.IGNORECASE)
             except:
                 print 'canot compile {} as regex'.format(k)
     except Exception as e:
@@ -41,10 +44,7 @@ def clear(k):
     global matches
     global kbname
     mapping.pop(k, None)
-    try:
-        matches.pop(re.compile('.*' + k + '.*', re.IGNORECASE), None)
-    except:
-        print 'cannot compile {} as regex'.format(k)
+    matches.pop(k, None)
     try:
         client.write(kbname, json.dumps(mapping))
     except Exception as e:
@@ -56,8 +56,11 @@ def update(k, v):
     global matches
     global kbname
     mapping[k] = v
+    value = [v, [], None]
+    matches[k] = value
     try:
-        matches[re.compile('.*' + k + '.*', re.IGNORECASE)] = v
+        value[1] = k.split('.*')
+        value[2] = re.compile('.*' + k + '.*', re.IGNORECASE)
     except:
         print 'cannot compile {} as regex'.format(k)
     try:
