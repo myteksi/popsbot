@@ -23,12 +23,15 @@ def hello(message):
 def prepare(item):
     result = item
     for pattern in [('<http', 1), ('<mailto:', 8)]:
-        index1 = result.find(pattern[0])
-        if index1 != -1:
+        while True:
+            index1 = result.find(pattern[0])
+            if index1 == -1:
+                break
             index2 = result.find('>', index1)
-            if index2 != -1:
-                result = result[:index1] + result[index1 +
-                                                  pattern[1]: index2] + result[index2 + 1:]
+            if index2 == -1:
+                break
+            result = result[:index1] + result[index1 +
+                                              pattern[1]: index2] + result[index2 + 1:]
     return result
 
 
