@@ -50,7 +50,10 @@ def list(message):
         message.reply(
             'sorry but I cannot let you do this. please contact jiannyeu.yong or chang.')
         return
-    message.reply('```' + json.dumps(mapping, indent=4) + '```')
+    content = json.dumps(mapping, indent=4)
+    message._client.upload_content(
+        message._body['channel'], 'popsbot-list', content, 'popsbot-list')
+    #message.reply('```' + json.dumps(mapping, indent=4) + '```')
 
 
 @respond_to('^train (.*)$')
